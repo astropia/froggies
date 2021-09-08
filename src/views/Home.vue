@@ -95,7 +95,7 @@ export default {
     right 0
     bottom 0
     background-image url('~@/assets/border.png')
-    background-repeat-x no-repeat
+    background-repeat repeat-y
     background-size 10rem auto
     z-index -1
   p
