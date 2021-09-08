@@ -106,6 +106,7 @@ export default {
     text-align center
     font-size 2rem
     line-height 2rem
+    font-weight 500
 
 .home-banner
   display flex
